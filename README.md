@@ -1,5 +1,8 @@
 # Patch_analysis
-Python codes related to the patch analysis
+Python codes related to the patch analysis for this publication:
+> **Surface morphometrics reveals local membrane thickness variation in organellar subcompartments.**
+> Michaela Medina<sup>†</sup>, Ya-Ting Chang<sup>†</sup>, Hamidreza Rahmani, Daniel Fuentes, Benjamin A. Barad, Danielle A. Grotjahn
+> *BioRxiv* 2025 May 1:2025.04.30.651574. doi: https://doi.org/10.1101/2025.04.30.651574
 
 The development of the scripts was based on the Surface Morphometrics toolkit. Installing Surface Morphometrics is highly recommended.
 
