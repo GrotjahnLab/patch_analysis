@@ -3,11 +3,11 @@
 
 For every vertex of one or more pycurv/graph-tool TriangleGraph surfaces
 (``.gt`` files), find the nearest voxel of a fibril segmentation mask (an
-MRC volume) and record that distance as a new ``mrc_distance`` vertex
-property. Results are written as an annotated ``.gt`` graph, a ``.vtp``
-surface (for viewing in ParaView), and -- when a matching ``<graph>.csv``
-morphometrics table exists next to the graph file -- an updated CSV with a
-``mrc_distance`` column.
+MRC volume) and record that distance as a new vertex property (named
+``mrc_distance`` by default; see ``--column-name``). Results are written as
+an annotated ``.gt`` graph, a ``.vtp`` surface (for viewing in ParaView), and
+-- when a matching ``<graph>.csv`` morphometrics table exists next to the
+graph file -- an updated CSV with the same column added.
 """
 import glob
 import os
@@ -52,11 +52,18 @@ def load_fibril_mask_coords(mask_path, apix, min_label):
     return coords_xyz
 
 
-def process_membrane_graph(graph_path, fibril_tree, output_dir, unit, make_plots, n_check, rng):
+def process_membrane_graph(graph_path, fibril_tree, output_dir, unit, make_plots, n_check, rng, column_name):
     """Annotate one membrane graph with distances to the fibril mask and save outputs."""
     click.echo(f"\n=== {graph_path} ===")
     tg = TriangleGraph()
     tg.graph = load_graph(graph_path)
+
+    if column_name in tg.graph.vertex_properties:
+        raise click.ClickException(
+            f"Graph '{graph_path}' already has a vertex property named '{column_name}'. "
+            "Pick a different --column-name."
+        )
+
     xyz = tg.graph.vp.xyz.get_2d_array([0, 1, 2]).transpose()
     click.echo(f"  membrane vertices: {len(xyz)}")
 
@@ -99,7 +106,7 @@ def process_membrane_graph(graph_path, fibril_tree, output_dir, unit, make_plots
     # property map's underlying array, so this assigns each vertex its own distance.
     mrc_distance = tg.graph.new_vertex_property("float")
     mrc_distance.a = distances
-    tg.graph.vertex_properties["mrc_distance"] = mrc_distance
+    tg.graph.vertex_properties[column_name] = mrc_distance
 
     out_gt = os.path.join(output_dir, f"{stem}_mrc_distance.gt")
     out_vtp = os.path.join(output_dir, f"{stem}_mrc_distance.vtp")
@@ -114,6 +121,11 @@ def process_membrane_graph(graph_path, fibril_tree, output_dir, unit, make_plots
         return
 
     df = pd.read_csv(csv_path)
+    if column_name in df.columns:
+        raise click.ClickException(
+            f"CSV '{csv_path}' already has a column named '{column_name}'. "
+            "Pick a different --column-name."
+        )
     if len(df) != len(xyz):
         click.echo(
             f"  WARNING: CSV has {len(df)} rows but graph has {len(xyz)} vertices; "
@@ -121,7 +133,7 @@ def process_membrane_graph(graph_path, fibril_tree, output_dir, unit, make_plots
             err=True,
         )
 
-    df["mrc_distance"] = mrc_distance.a
+    df[column_name] = mrc_distance.a
     out_csv = os.path.join(output_dir, os.path.basename(csv_path).replace(".csv", "_with_mrc_dist.csv"))
     df.to_csv(out_csv, index=False)
     click.echo(f"  saved {out_csv}")
@@ -132,7 +144,7 @@ def process_membrane_graph(graph_path, fibril_tree, output_dir, unit, make_plots
             idx
             for idx in check_idx
             if not np.isclose(
-                mrc_distance[tg.graph.vertex(int(idx))], df.loc[idx, "mrc_distance"], rtol=1e-9
+                mrc_distance[tg.graph.vertex(int(idx))], df.loc[idx, column_name], rtol=1e-9
             )
         ]
         if mismatches:
@@ -212,7 +224,15 @@ def process_membrane_graph(graph_path, fibril_tree, output_dir, unit, make_plots
     default=True,
     help="Write per-graph diagnostic PNGs (mask-vs-membrane scatter + distance histogram).",
 )
-def main(mask_mrc, graph_glob, output_dir, apix, unit, min_label, n_check, seed, plots):
+@click.option(
+    "--column-name",
+    default="mrc_distance",
+    show_default=True,
+    help="Name for the new vertex property (in the .gt/.vtp) and the new CSV column. "
+    "If a graph or CSV already has a property/column with this name, the run stops "
+    "with an error so you can rerun with a different --column-name.",
+)
+def main(mask_mrc, graph_glob, output_dir, apix, unit, min_label, n_check, seed, plots, column_name):
     """Annotate membrane graph(s) with distance-to-fibril, per vertex.
 
     \b
@@ -220,12 +240,11 @@ def main(mask_mrc, graph_glob, output_dir, apix, unit, min_label, n_check, seed,
       python surface_distance_from_mrc.py \\
           --mask-mrc 208_fibers_binary_bin8.mrc \\
           --graph-glob "1_morph/208_bin8_manual_clean_merged_segmented_lyso?.*_refined.gt" \\
-          --apix 1.741 --output-dir lyso_fibril_distances
+          --apix 1.741 --output-dir lyso_fibril_patches
 
     For each matched graph, this looks for a CSV with the same name (extension
     swapped to .csv) in the same folder -- typically a pycurv morphometrics table --
-    and, if found, writes a copy of it with a new mrc_distance column.
-    There are also png files created for sanity checks
+    and, if found, writes a copy of it with the new distance column added.
     """
     graph_paths = sorted(glob.glob(graph_glob))
     if not graph_paths:
@@ -239,7 +258,7 @@ def main(mask_mrc, graph_glob, output_dir, apix, unit, min_label, n_check, seed,
     rng = np.random.default_rng(seed)
 
     for graph_path in graph_paths:
-        process_membrane_graph(graph_path, fibril_tree, output_dir, unit, plots, n_check, rng)
+        process_membrane_graph(graph_path, fibril_tree, output_dir, unit, plots, n_check, rng, column_name)
 
 
 if __name__ == "__main__":
