@@ -45,4 +45,5 @@ Histogram of distances:
 ### Distances
 We can use [MorphometricsX](https://github.com/baradlab/morphometricsx) bundle in [Chimerax](https://github.com/RBVI/ChimeraX) to display the new label on the surface and see the segmentation as well:
 ![Screenshot from ChimeraX where the VTP file is loaded using MorphmetricsX bundle and colored by the mrc_distance label](morphometricsX.png)
+
 This file can then be used in [ParaView](https://www.paraview.org/) for further analysis. 
