@@ -6,6 +6,9 @@ Python codes related to the patch analysis for this publication:
 
 The development of the scripts was based on the Surface Morphometrics toolkit. Installing Surface Morphometrics is highly recommended.
 
+# surface_distance_from_mrc
+Python code to calculate distances between an mrc segmentations and surfaces in the same tomogram, see [Here](surface_distance_from_mrc_readme/surface_distance_from_mrc_readme.md)
+
 ## Citation
 Pycurv and Surface Morphometrics toolkits were applied to this project. 
 
