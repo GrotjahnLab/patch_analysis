@@ -1,6 +1,6 @@
 # surface_distance_from_mrc
 
-Compute, per vertex of one or more [pycurv](https://github.com/kalemariaheinz/pycurv) membrane surface graphs (`.gt`), the distance to the nearest voxel of a segmentation mask (`.mrc`).
+Compute, per vertex of one or more [pycurv](https://github.com/kalemariaheinz/pycurv) membrane surface graphs (`.gt`), the distance to the nearest voxel of a segmentation mask (`.mrc`). This script was developped to calculate distances of lysosomal membranes from the mrc segmentation of the LLOMe fibrillar structures directly without converting the segmentation into particles or surfaces [biorXiv](https://doi.org/10.64898/2026.01.17.700056)
 
 For each membrane graph the script:
 - finds the nearest segmentation-mask voxel to every mesh vertex (`scipy.spatial.cKDTree`)
@@ -47,6 +47,15 @@ Histogram of distances:
 
 ### Distances
 We can use [MorphometricsX](https://github.com/baradlab/morphometricsx) bundle in [Chimerax](https://github.com/RBVI/ChimeraX) to display the new label on the surface and see the segmentation as well:
-![Screenshot from ChimeraX where the VTP file is loaded using MorphmetricsX bundle and colored by the mrc_distance label](morphometricsX.png)
+<figure>
+  <img src="morphometricsX.png" alt="Screenshot from ChimeraX where the VTP file is loaded using MorphmetricsX bundle and colored by the mrc_distance label">
+  <figcaption align="center"><b>Figure:</b> The labeled surface shown in Chimerax using MorphmetricsX, surface and segmentations from Li et. al. https://doi.org/10.64898/2026.01.17.700056 .</figcaption>
+</figure>
+
 
 This file can then be used in [ParaView](https://www.paraview.org/) for further analysis. 
+
+## Citation
+> **Cathepsin-dependent amyloid formation drives mechanical rupture of lysosomal membranes**
+> Delong Li, Wenxin Zhang, Michaela Medina, Jan F. M. Stuke, Andre Schwarz, Jonas Brill, Johann Brenner, Felix Kraus, Simon Ohlerich, Javier Lizarrondo, Jeremy Pflaum, Julia H. Grass, Lena-Marie Soltow, Dietmar Hammerschmid, Natalie Weber, Sonja Welsch, Julian D. Langer, Maike Windbergs, J. Wade Harper, Erin Schuman, Gerhard Hummer, Danielle A. Grotjahn, Florian Wilfling
+> bioRxiv 2026.01.17.700056; doi: https://doi.org/10.64898/2026.01.17.700056
