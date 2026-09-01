@@ -57,5 +57,6 @@ This file can then be used in [ParaView](https://www.paraview.org/) for further 
 
 ## Citation
 > **Cathepsin-dependent amyloid formation drives mechanical rupture of lysosomal membranes**
+> 
 > Delong Li, Wenxin Zhang, Michaela Medina, Jan F. M. Stuke, Andre Schwarz, Jonas Brill, Johann Brenner, Felix Kraus, Simon Ohlerich, Javier Lizarrondo, Jeremy Pflaum, Julia H. Grass, Lena-Marie Soltow, Dietmar Hammerschmid, Natalie Weber, Sonja Welsch, Julian D. Langer, Maike Windbergs, J. Wade Harper, Erin Schuman, Gerhard Hummer, Danielle A. Grotjahn, Florian Wilfling
 > bioRxiv 2026.01.17.700056; doi: https://doi.org/10.64898/2026.01.17.700056
