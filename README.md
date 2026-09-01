@@ -6,8 +6,6 @@ Python codes related to the patch analysis for this publication:
 
 The development of the scripts was based on the Surface Morphometrics toolkit. Installing Surface Morphometrics is highly recommended.
 
-# surface_distance_from_mrc
-Python code to calculate distances between an mrc segmentations and surfaces in the same tomogram, see [Here](surface_distance_from_mrc_readme/surface_distance_from_mrc_readme.md)
 
 ## Citation
 Pycurv and Surface Morphometrics toolkits were applied to this project. 
@@ -23,3 +21,13 @@ Pycurv and Surface Morphometrics toolkits were applied to this project.
 > **Reliable estimation of membrane curvature for cryo-electron tomography.**  
 > Maria Salfer,Javier F. Collado,Wolfgang Baumeister,Rubén Fernández-Busnadiego,Antonio Martínez-Sánchez  
 > *PLOS Comp Biol* August 2020; doi: https://doi.org/10.1371/journal.pcbi.1007962 
+
+
+
+# surface_distance_from_mrc
+Python code to calculate distances between an mrc segmentations and surfaces in the same tomogram, see [Here](surface_distance_from_mrc_readme/surface_distance_from_mrc_readme.md)
+
+## Citation
+> **Cathepsin-dependent amyloid formation drives mechanical rupture of lysosomal membranes**
+> Delong Li, Wenxin Zhang, Michaela Medina, Jan F. M. Stuke, Andre Schwarz, Jonas Brill, Johann Brenner, Felix Kraus, Simon Ohlerich, Javier Lizarrondo, Jeremy Pflaum, Julia H. Grass, Lena-Marie Soltow, Dietmar Hammerschmid, Natalie Weber, Sonja Welsch, Julian D. Langer, Maike Windbergs, J. Wade Harper, Erin Schuman, Gerhard Hummer, Danielle A. Grotjahn, Florian Wilfling
+> bioRxiv 2026.01.17.700056; doi: https://doi.org/10.64898/2026.01.17.700056
